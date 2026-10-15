@@ -1,0 +1,23 @@
+
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: amica_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: amica_db
+      POSTGRES_USER: amica
+      POSTGRES_PASSWORD: amica_secret
+    ports:
+      - "5433:5432"
+    volumes:
+      - amica_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U amica -d amica_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  amica_pgdata:
